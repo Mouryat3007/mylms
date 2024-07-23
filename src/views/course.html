@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>All Courses</h1>
+    <ul>
+        <% courses.forEach(course => { %>
+        <li>
+            <a href="/course/<%= course.id %>"><%= course.title %></a>
+        </li>
+        <% }) %>
+    </ul>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

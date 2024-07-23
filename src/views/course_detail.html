@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= course.title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1><%= course.title %></h1>
+    <p><%= course.description %></p>
+    <a href="/enroll/<%= course.id %>">Enroll in this course</a>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

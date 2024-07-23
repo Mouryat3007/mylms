@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Welcome, <%= username %></h1>
+    <h2>Available Courses</h2>
+    <ul>
+        <% courses.forEach(course => { %>
+        <li>
+            <a href="/course/<%= course.id %>"><%= course.title %></a>
+            <a href="/enroll/<%= course.id %>">Enroll</a>
+        </li>
+        <% }) %>
+    </ul>
+    <a href="/logout">Logout</a>
+</body>
+</html>
