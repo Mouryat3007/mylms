@@ -1,17 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Enrollment } from './Enrollment';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Course } from './Course';
+import { User } from './user';  // Assuming there's a User entity
 
 @Entity()
-export class Course {
+export class Enrollment {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
-  @Column()
-  title: string;
+  @ManyToOne(() => User, user => user.enrollments)
+  user!: User;
 
-  @Column()
-  description: string;
+  @ManyToOne(() => Course, course => course.enrollments)
+  course!: Course;
 
-  @OneToMany(() => Enrollment, enrollment => enrollment.course)
-  enrollments: Enrollment[];
+  @Column({ type: 'date', nullable: false })
+  enrollmentDate!: Date;
 }

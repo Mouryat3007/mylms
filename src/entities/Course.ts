@@ -6,10 +6,10 @@ export class Course {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   title: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   description: string;
 
   @OneToMany(() => Enrollment, enrollment => enrollment.course)
