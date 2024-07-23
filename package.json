@@ -1,0 +1,41 @@
+{
+    "name": "lms",
+    "version": "1.0.0",
+    "description": "A Learning Management System application built with Node.js, Express, TypeScript, and SQLite.",
+    "main": "dist/server.js",
+    "scripts": {
+      "start": "node dist/server.js",
+      "dev": "ts-node-dev src/server.ts",
+      "build": "tsc"
+    },
+    "keywords": [
+      "lms",
+      "nodejs",
+      "typescript",
+      "express",
+      "typeorm",
+      "sqlite"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "bcryptjs": "^2.4.3",
+      "body-parser": "^1.19.1",
+      "express": "^4.18.2",
+      "express-session": "^1.17.3",
+      "jsonwebtoken": "^9.0.0",
+      "reflect-metadata": "^0.1.13",
+      "sqlite3": "^5.1.1",
+      "typeorm": "^0.2.41"
+    },
+    "devDependencies": {
+      "@types/bcryptjs": "^2.4.2",
+      "@types/body-parser": "^1.19.2",
+      "@types/express": "^4.17.17",
+      "@types/express-session": "^1.17.6",
+      "@types/jsonwebtoken": "^9.0.1",
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^4.9.4"
+    }
+  }
+  
