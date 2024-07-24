@@ -1,17 +1,18 @@
+// src/entities/Course.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Enrollment } from './Enrollment';
 
 @Entity()
 export class Course {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: false })
-  description: string;
+  description!: string;
 
-  @OneToMany(() => Enrollment, enrollment => enrollment.course)
-  enrollments: Enrollment[];
+  @OneToMany(() => Enrollment, (enrollment: Enrollment) => enrollment.course)
+  enrollments: Enrollment[] = [];
 }

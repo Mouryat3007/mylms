@@ -1,16 +1,13 @@
 import { ConnectionOptions } from 'typeorm';
-import path from 'path';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
-// Load environment variables from .env file
-dotenv.config();
+dotenv.config(); // Load environment variables
 
 const config: ConnectionOptions = {
   type: 'sqlite',
-  database: process.env.DATABASE_PATH || path.resolve(__dirname, '../lms.db'),
-  synchronize: process.env.NODE_ENV !== 'production',
-  logging: process.env.LOGGING === 'true',
-  entities: [path.resolve(__dirname, '../src/entities/**/*.ts')],
+  database: process.env.DB_NAME || 'lms.db',
+  synchronize: true,
+  entities: ['src/entities/**/*.ts'],
 };
 
 export default config;

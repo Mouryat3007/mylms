@@ -1,58 +1,60 @@
+// src/controllers/AuthController.ts
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { User } from '../entities/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getRepository } from 'typeorm';
+import { User } from '../entities/User';
 
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userRepository = getRepository(User);
-
   try {
-    const user = await userRepository.findOne({ where: { username } });
-    if (!user) {
-      return res.status(401).send('Invalid username or password');
-    }
+    const { username, password } = req.body;
 
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).send('Invalid username or password');
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({ where: { username } });
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
-      process.env.JWT_SECRET_KEY || 'default_secret_key',
+      process.env.JWT_SECRET!,
       { expiresIn: '1h' }
     );
 
-    if (req.session) {
-      req.session.token = token;
-    } else {
-      return res.status(500).send('Session not initialized');
-    }
+    req.session.token = token;
 
-    res.redirect('/dashboard');
+    res.json({ message: 'Login successful' });
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).send('Internal server error');
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userRepository = getRepository(User);
-
   try {
-    const hashedPassword = bcrypt.hashSync(password, 8);
-    const newUser = userRepository.create({
-      username,
-      password: hashedPassword,
-    });
+    const { username, password, role } = req.body;
 
-    await userRepository.save(newUser);
-    res.redirect('/login');
+    const userRepository = getRepository(User);
+
+    // Check if the user already exists
+    const existingUser = await userRepository.findOne({ where: { username } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username already taken' });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 12); // Increased salt rounds
+
+    const user = new User();
+    user.username = username;
+    user.password = hashedPassword;
+    user.role = role;
+
+    await userRepository.save(user);
+
+    res.json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error('Error during registration:', error);
-    res.status(500).send('Internal server error');
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

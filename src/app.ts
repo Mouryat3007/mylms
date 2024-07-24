@@ -34,7 +34,7 @@ createConnection(config).then(() => {
 
   // Set view engine
   app.set('view engine', 'ejs');
-  
+
   // Serve static files
   app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,7 +43,7 @@ createConnection(config).then(() => {
   app.use(courseRoutes);
 
   // 404 handler
-  app.use((req, res) => {
+  app.use((req: any, res: { status: (arg0: number) => { (): any; new(): any; render: { (arg0: string): void; new(): any; }; }; }) => {
     res.status(404).render('404');
   });
 
@@ -57,4 +57,4 @@ createConnection(config).then(() => {
   app.listen(3000, () => {
     console.log('Server started on http://localhost:3000');
   });
-}).catch(error => console.log('TypeORM connection error:', error));
+}).catch((error: any) => console.log('TypeORM connection error:', error));

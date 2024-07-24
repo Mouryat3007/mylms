@@ -1,18 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+// src/entities/Enrollment.ts
+import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from './User';
 import { Course } from './Course';
-import { User } from './user';  // Assuming there's a User entity
 
 @Entity()
 export class Enrollment {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => User, user => user.enrollments)
-  user!: User;
-
-  @ManyToOne(() => Course, course => course.enrollments)
+  @ManyToOne(() => Course, (course: { enrollments: any; }) => course.enrollments)
   course!: Course;
 
-  @Column({ type: 'date', nullable: false })
-  enrollmentDate!: Date;
+  @ManyToOne(() => User, (user: { enrollments: any; }) => user.enrollments)
+  user!: User;
 }

@@ -1,30 +1,35 @@
+// src/middlewares/authMiddleware.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { User } from '../entities/User';
 
-// Extend the Express Request interface to include the user property
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: any;
-  }
-}
-
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.session?.token;
+export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  const token = req.headers['authorization'];
   if (!token) {
-    return res.redirect('/login');
+    res.status(401).json({ message: 'No token provided' });
+    return;
   }
 
-  try {
-    const secretKey = process.env.JWT_SECRET_KEY || 'default_secret_key';
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
+  jwt.verify(token, process.env.JWT_SECRET as string, (err: any, decoded: User) => {
+    if (err) {
+      res.status(500).json({ message: 'Failed to authenticate token' });
+      return;
+    }
+
+    req.user = decoded as User;
     next();
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    if (error.name === 'TokenExpiredError') {
-      res.status(401).send('Session expired. Please log in again.');
-    } else {
-      res.status(401).send('Unauthorized');
+  });
+};
+
+// src/types/express/index.d.ts
+
+import { User } from '../entities/User';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
     }
   }
-};
+}

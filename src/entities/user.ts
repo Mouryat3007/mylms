@@ -4,17 +4,15 @@ import { Enrollment } from './Enrollment';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ unique: true })
-  username!: string;
+  id: number | undefined;
 
   @Column()
-  password!: string;
+  username: string | undefined;
 
   @Column()
-  role!: string;
+  password: string | undefined;
 
-  @OneToMany(() => Enrollment, enrollment => enrollment.user)
-  enrollments: Enrollment[];
+  @OneToMany(() => Enrollment, (enrollment: { user: any; }) => enrollment.user)
+  enrollments: Enrollment[] | undefined;
+  role: any;
 }
